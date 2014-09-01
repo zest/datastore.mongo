@@ -2,7 +2,7 @@
     "name": "datastore.mongo",
     "description": "datastore.mongo is a mongoDB datastore component for soul",
     "version": "0.0.1",
-    "main": "./lib/index",
+    "main": "./lib/schema",
     "private": true,
     "scripts": {
         "coverage": "grunt coverage",
@@ -34,7 +34,9 @@
     "dependencies": {
         "base.logger": "soul-infra/base.logger",
         "base.specifications": "soul-infra/base.specifications",
-        "q": "*"
+        "q": "*",
+        "mongoose": "*",
+        "merge": "*"
     },
     "devDependencies": {
         "grunt": "*",

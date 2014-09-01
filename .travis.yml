@@ -2,6 +2,12 @@ language: node_js
 node_js:
     # nodejs version
   - "0.11"
+services:
+    # mongodb is required to run tests
+  - mongodb
+before_script:
+    # let mongodb start
+  - sleep 15
 before_install:
     # install grunt and bower dependencies
   - "npm install grunt-cli -g"
