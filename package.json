@@ -53,5 +53,12 @@
         "doc": "doc",
         "test": "test",
         "out": ".out"
+    },
+    "config": {
+        "blanket": {
+            "pattern": [
+                "src"
+            ]
+        }
     }
 }

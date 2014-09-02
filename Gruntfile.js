@@ -76,10 +76,15 @@ module.exports = function (grunt) {
         // mocha and coverage configuration
         mochacov: {
             options: {
+                // set test-case timeout in milliseconds [2000]
                 timeout: 50000,
-                ignoreLeaks: false,
-                // "bdd", "tdd", "exports" etc
+                // include sub directories.
+                recursive: true,
+                // check for global variable leaks.
+                'check-leaks': false,
+                // specify user-interface (bdd|tdd|exports).
                 ui: 'bdd',
+                // "slow" test threshold in milliseconds [75].
                 slow: 10,
                 files: ['<%= pkg.directories.test %>/**.js']
             },
@@ -90,7 +95,8 @@ module.exports = function (grunt) {
             },
             coverage: {
                 options: {
-                    coveralls: true
+                    coveralls: true,
+                    instrument: true
                 }
             }
         },
