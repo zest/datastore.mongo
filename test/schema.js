@@ -1,20 +1,17 @@
 'use strict';
 // shut down the logger
 require('base.logger').configure([]);
-var Mongo = require('./injector')(),
-    chai = require('chai'),
-    expect = chai.expect,
-    should = chai.should(),
-    assert = chai.assert;
+var Schema = require('../lib/schema'),
+    expect = require('chai').expect;
 describe('datastore.mongo', function () {
     // it should return a module
     it('should return a module', function () {
-        expect(Mongo).not.to.equal(undefined);
+        expect(Schema).not.to.equal(undefined);
     });
     // positive cases
     // it should be able to connect to a local database
     it('should be able to connect to a local database', function (done) {
-        var db = new Mongo({
+        var db = new Schema({
             hosts: [{
                 host: 'localhost/test'
             }]
@@ -29,7 +26,7 @@ describe('datastore.mongo', function () {
     });
     // it should be able to create a store object
     it('should be able to create a store object');// function (done) {
-//        var db = new Mongo({
+//        var db = new Schema({
 //            hosts: [{
 //                host: 'localhost/test'
 //            }]
@@ -81,7 +78,7 @@ describe('datastore.mongo', function () {
     // negative cases
     // it should not be able to connect to a non-existent database
     it('should be able to connect to a non-existent database', function (done) {
-        var db = new Mongo({
+        var db = new Schema({
             hosts: [{
                 host: 'non_existant_db/test'
             }]

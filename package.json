@@ -46,7 +46,8 @@
         "ink-docstrap": "*",
         "grunt-jsdoc": "*",
         "grunt-mocha-cov": "*",
-        "chai": "*"
+        "chai": "*",
+        "merge": "*"
     },
     "directories": {
         "lib": "lib",

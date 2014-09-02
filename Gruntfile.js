@@ -78,21 +78,21 @@ module.exports = function (grunt) {
             options: {
                 // set test-case timeout in milliseconds [2000]
                 timeout: 50000,
-                // include sub directories.
-                recursive: true,
                 // check for global variable leaks.
-                'check-leaks': false,
+                'check-leaks': true,
                 // specify user-interface (bdd|tdd|exports).
                 ui: 'bdd',
                 // "slow" test threshold in milliseconds [75].
                 slow: 10,
-                files: '<%= pkg.directories.test %>/**.js'
+                files: '<%= pkg.directories.test %>/**/*.js'
             },
+            // default test option
             test: {
                 options: {
                     reporter: 'spec'
                 }
             },
+            // for sending coverage report to coveralls
             coverage: {
                 options: {
                     coveralls: true
@@ -268,7 +268,7 @@ module.exports = function (grunt) {
         'document',
         'watch'
     ]);
-    // observe script is the default task
+    // observe is the default task
     grunt.registerTask('default', [
         'observe'
     ]);
