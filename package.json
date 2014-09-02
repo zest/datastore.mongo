@@ -45,12 +45,8 @@
         "grunt-jslint": "*",
         "ink-docstrap": "*",
         "grunt-jsdoc": "*",
-        "grunt-jasmine-node": "*",
-        "grunt-istanbul": "*",
-        "grunt-env": "*",
-        "merge": "*",
-        "grunt-exec": "*",
-        "coveralls": "*"
+        "grunt-mocha-cov": "*",
+        "chai": "*"
     },
     "directories": {
         "lib": "lib",

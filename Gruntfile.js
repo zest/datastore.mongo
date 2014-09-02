@@ -24,22 +24,14 @@ module.exports = function (grunt) {
                 './README.md'
             ]
         ),
-    // jasmine globals
-        jasmineGlobals = [
-            'jasmine',
+    // mocha globals
+        mochaGlobals = [
             'describe',
-            'xdescribe',
             'it',
-            'xit',
-            'expect',
             'beforeEach',
             'afterEach',
-            'beforeAll',
-            'afterAll',
-            'spyOn',
-            'runs',
-            'waits',
-            'waitsFor'
+            'before',
+            'after'
         ],
     // jslint default options
         jslintOptions = {
@@ -75,26 +67,32 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-jslint');
     // ...for generating jsdoc documentation
     grunt.loadNpmTasks('grunt-jsdoc');
-    // ...for running node jasmine tests
-    grunt.loadNpmTasks('grunt-jasmine-node');
-    // ...for code coverage
-    grunt.loadNpmTasks('grunt-istanbul');
-    // ...for setting environment variables for code coverage
-    grunt.loadNpmTasks('grunt-env');
-    // ...for executing shell commands
-    grunt.loadNpmTasks('grunt-exec');
+    // ...for running node mocha tests and code coverage reports
+    grunt.loadNpmTasks('grunt-mocha-cov');
     // Project configuration.
     grunt.initConfig({
         // read the package.json for use
         pkg: grunt.file.readJSON('package.json'),
-        // jasmine configuration
-        jasmine_node: {
+        // mocha and coverage configuration
+        mochacov: {
             options: {
-                match: '.',
-                matchall: false,
-                specNameMatcher: ''
+                timeout: 50000,
+                ignoreLeaks: false,
+                // "bdd", "tdd", "exports" etc
+                ui: 'bdd',
+                slow: 10,
+                files: ['<%= pkg.directories.test %>/**.js']
             },
-            test: ['<%= pkg.directories.test %>']
+            test: {
+                options: {
+                    reporter: 'spec'
+                }
+            },
+            coverage: {
+                options: {
+                    coveralls: true
+                }
+            }
         },
         // clean configuration
         clean: {
@@ -152,7 +150,7 @@ module.exports = function (grunt) {
                 src: files.test,
                 directives: merge({
                     node: true,
-                    predef: jasmineGlobals
+                    predef: mochaGlobals
                 }, jslintOptions),
                 options: {
                     // only display errors when set to true
@@ -188,37 +186,6 @@ module.exports = function (grunt) {
                     configure: '<%= pkg.directories.doc %>/jsdoc.json',
                     template: './node_modules/ink-docstrap/template'
                 }
-            }
-        },
-        // configurations for istanbul coverage reports
-        // To use this grunt-istanbul plugin, register a grunt task to run the following:
-        //  - Instrument your source code
-        //  - Run your test suite against your instrumented source code
-        //  - Store your coverage results
-        //  - Make the report
-        env: {
-            coverage: {
-                APP_DIR_FOR_CODE_COVERAGE: '<%= pkg.directories.out %>/coverage/instrument/'
-            }
-        },
-        instrument: {
-            files: files.lib.concat('!**/*.json'),
-            options: {
-                lazy: true,
-                basePath: '<%= pkg.directories.out %>/coverage/instrument'
-            }
-        },
-        storeCoverage: {
-            options: {
-                dir: '<%= pkg.directories.out %>/coverage/reports'
-            }
-        },
-        makeReport: {
-            src: '<%= pkg.directories.out %>/coverage/reports/**/*.json',
-            options: {
-                type: 'lcov',
-                dir: '<%= pkg.directories.out %>/coverage/reports/lcov',
-                print: 'detail'
             }
         },
         exec: {
@@ -259,13 +226,7 @@ module.exports = function (grunt) {
     ]);
     // coverage script
     grunt.registerTask('coverage', [
-        'clean:out',
-        'env:coverage',
-        'instrument',
-        'test',
-        'storeCoverage',
-        'makeReport',
-        'exec:coverage'
+        'mochacov:coverage'
     ]);
     // init script
     grunt.registerTask('init', [
@@ -275,7 +236,7 @@ module.exports = function (grunt) {
         'jslint:lib',
         'jslint:test',
         'jslint:build',
-        'jasmine_node:test'
+        'mochacov:test'
     ]);
     // document script
     grunt.registerTask('document', [
@@ -286,12 +247,12 @@ module.exports = function (grunt) {
     // tasks to run when files change
     grunt.registerTask('lib-queue', [
         'jslint:lib',
-        'jasmine_node:test',
+        'mochacov:test',
         'document'
     ]);
     grunt.registerTask('test-queue', [
         'jslint:test',
-        'jasmine_node:test'
+        'mochacov:test'
     ]);
     grunt.registerTask('build-queue', [
         'jslint:build'
