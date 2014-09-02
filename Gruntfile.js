@@ -86,7 +86,7 @@ module.exports = function (grunt) {
                 ui: 'bdd',
                 // "slow" test threshold in milliseconds [75].
                 slow: 10,
-                files: ['<%= pkg.directories.test %>/**.js']
+                files: '<%= pkg.directories.test %>/**.js'
             },
             test: {
                 options: {
@@ -95,8 +95,7 @@ module.exports = function (grunt) {
             },
             coverage: {
                 options: {
-                    coveralls: true,
-                    instrument: true
+                    coveralls: true
                 }
             }
         },

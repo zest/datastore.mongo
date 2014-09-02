@@ -57,7 +57,7 @@
     "config": {
         "blanket": {
             "pattern": [
-                "src"
+                "lib"
             ]
         }
     }

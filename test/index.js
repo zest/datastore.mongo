@@ -1,4 +1,6 @@
 'use strict';
+// shut down the logger
+require('base.logger').configure([]);
 var Mongo = require('./injector')(),
     chai = require('chai'),
     expect = chai.expect,
