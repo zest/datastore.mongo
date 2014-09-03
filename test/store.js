@@ -4,27 +4,8 @@
 var Schema = require('../lib/schema'),
     expect = require('chai').expect;
 describe('datastore.mongo', function () {
-    // it should return a module
-    it('should return a module', function () {
-        expect(Schema).not.to.equal(undefined);
-    });
-    // positive cases
-    // it should be able to connect to a local database
-    it('should be able to connect to a local database', function (done) {
-        var db = new Schema({
-            hosts: [{
-                host: 'localhost/test'
-            }]
-        });
-        db.connection.then(function (conn) {
-            expect(conn).not.to.equal(undefined);
-            done();
-        }).catch(function (error) {
-            done(error);
-        });
-    });
     // it should be able to create a store object
-    it('should be able to create and read a store object', function (done) {
+    it('should be able to create and read a data from store', function (done) {
         var db = new Schema({
             hosts: [{
                 host: 'localhost/test'
@@ -37,8 +18,7 @@ describe('datastore.mongo', function () {
             }
         }).then(function () {
             return db.read('TestStore');
-        }).then(function (store) {
-            expect(store).not.to.equal(undefined);
+        }).then(function (TestStore) {
             done();
         }).catch(function (error) {
             done(error);

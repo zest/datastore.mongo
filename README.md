@@ -5,3 +5,26 @@
 
 # soul-infra / datastore.mongo
 > datastore.mongo is a mongoDB datastore component for soul
+
+    var Datastore = require('datastore.mongo');
+    var User = DataStore.createSchema('User', {
+        username: {
+            type: String,
+            unique: true
+        },
+        password: {
+            type: String,
+            encrypted: true
+        },
+        status: String
+    });
+    
+    var me = User.create({
+        username: 'foo',
+        password: 'bar',
+        status: 'x'
+    });
+    
+    var me = new User({username: 'foo'});
+    
+    me.

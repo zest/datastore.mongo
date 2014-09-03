@@ -100,13 +100,12 @@ module.exports = specifications.components.DataStoreProvider.extend(
             }, options);
             this.connection = q.Promise(function (resolve, reject) {
                 var conn = mongoose.createConnection(connectionUrl, options, function (error, value) {
-                    logger.log('connected to database!');
-                    logger.log(arguments);
                     if (error) {
                         logger.error('connection failed!');
                         logger.error(error);
                         reject(error);
                     } else {
+                        logger.log('connected to database!');
                         resolve(conn);
                     }
                 });
@@ -118,18 +117,18 @@ module.exports = specifications.components.DataStoreProvider.extend(
          * @description Serializes the module and exports it into a stream
          * @throws Function is un-implemented!
          */
-        create: function (store) {
-            return q.Promise(function (resolve, reject) {
-                this.connection.then(function (db) {
-                    var schema = db.schema(store.structure);
-                    if (store.methods) {
-                        Object.keys(store.methods).forEach(function (methodName) {
-                            schema[methodName] = store.methods[methodName];
+        create: function (storeSchema) {
+            return this.connection.then(function (db) {
+                return q.Promise(function (resolve) {
+                    var schema = mongoose.Schema(storeSchema.structure);
+                    if (storeSchema.methods) {
+                        Object.keys(storeSchema.methods).forEach(function (methodName) {
+                            schema[methodName] = storeSchema.methods[methodName];
                         });
                     }
-                    if (store.statics) {
-                        Object.keys(store.statics).forEach(function (staticName) {
-                            schema.statics[staticName] = store.statics[staticName];
+                    if (storeSchema.statics) {
+                        Object.keys(storeSchema.statics).forEach(function (staticName) {
+                            schema.statics[staticName] = storeSchema.statics[staticName];
                         });
                     }
                     // adding the queue method as an instance and static method
@@ -143,9 +142,8 @@ module.exports = specifications.components.DataStoreProvider.extend(
                     // we add common plugins to the schema
                     schema.plugin(require('./plugins/created'));
                     schema.plugin(require('./plugins/modified'));
-                    resolve(db.model(store.name, schema));
-                }, function (error) {
-                    reject(error);
+                    logger.log('schema created');
+                    resolve(db.model(storeSchema.name, schema, storeSchema.name));
                 });
             });
         },
@@ -155,7 +153,13 @@ module.exports = specifications.components.DataStoreProvider.extend(
          * @description Serializes the module and exports it into a stream
          * @throws Function is un-implemented!
          */
-        read: specifications.base.Class.abstract,
+        read: function (schemaName) {
+            logger.log('trying to find schema', schemaName);
+            return this.connection.then(function (db) {
+                logger.log('found schema', schemaName, db.model(schemaName));
+                return db.model(schemaName);
+            });
+        },
         /**
          * @function
          * @see base/Class.abstract

@@ -77,14 +77,15 @@ module.exports = function (grunt) {
         mochacov: {
             options: {
                 // set test-case timeout in milliseconds [2000]
-                timeout: 50000,
+                timeout: 10000,
                 // check for global variable leaks.
                 'check-leaks': true,
                 // specify user-interface (bdd|tdd|exports).
                 ui: 'bdd',
                 // "slow" test threshold in milliseconds [75].
                 slow: 10,
-                files: '<%= pkg.directories.test %>/**/*.js'
+                files: '<%= pkg.directories.test %>/**/*.js',
+                bail: false
             },
             // default test option
             test: {
