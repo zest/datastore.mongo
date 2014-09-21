@@ -1,6 +1,6 @@
 {
     "name": "datastore.mongo",
-    "description": "datastore.mongo is a mongoDB datastore component for soul",
+    "description": "datastore.mongo is a mongoDB datastore component for zest",
     "version": "0.0.1",
     "main": "./lib/index",
     "private": true,
